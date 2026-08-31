@@ -1,0 +1,148 @@
+/* src/styles/globals.css */
+
+/* ── Google Fonts ── MUST be before @tailwind directives ── */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ── Tailwind directives ── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties (Design Tokens) — Dark (default) ── */
+:root,
+html.dark {
+  --color-void: #0A0A0A;
+  --color-surface: #141414;
+  --color-surface-2: #1A1A1A;
+  --color-surface-3: #242424;
+  --color-bone: #F5F5F0;
+  --color-bone-dim: #D4D4CE;
+  --color-muted: #A0A0A0;
+  --color-faint: #606060;
+  --color-red: #D91E1E;
+  --color-red-deep: #B8141C;
+  --color-white-5: rgba(255, 255, 255, 0.05);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-5-solid: #141414;
+  --color-outline-stroke: #F5F5F0;
+  --font-display: 'Bebas Neue', Anton, Impact, sans-serif;
+  --font-body: 'Space Grotesk', Inter, system-ui, sans-serif;
+}
+
+/* ── Light Mode Overrides ── */
+html.light {
+  --color-void: #F8F8F5;
+  --color-surface: #EFEFEB;
+  --color-surface-2: #E6E6E1;
+  --color-surface-3: #DDDDD8;
+  --color-bone: #1A1A1A;
+  --color-bone-dim: #2A2A2A;
+  --color-muted: #555555;
+  --color-faint: #888888;
+  --color-red: #C41818;
+  --color-red-deep: #A01015;
+  --color-white-5: rgba(0, 0, 0, 0.05);
+  --color-white-10: rgba(0, 0, 0, 0.08);
+  --color-white-5-solid: #E6E6E1;
+  --color-outline-stroke: #1A1A1A;
+}
+
+/* ── Base Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-void); }
+::-webkit-scrollbar-thumb { background: var(--color-red); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-red-deep); }
+
+/* ── Text Selection ── */
+::selection {
+  background-color: var(--color-red);
+  color: #F5F5F0;
+}
+
+/* ── Typography Base ── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+p, span, a, label, input, textarea {
+  font-family: var(--font-body);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ── Film Grain Keyframe ── */
+@keyframes grain-shift {
+  0%, 100% { transform: translate(0, 0); }
+  10%       { transform: translate(-2%, -3%); }
+  20%       { transform: translate(3%, 1%); }
+  30%       { transform: translate(-1%, 4%); }
+  40%       { transform: translate(4%, -2%); }
+  50%       { transform: translate(-3%, 3%); }
+  60%       { transform: translate(2%, -4%); }
+  70%       { transform: translate(-4%, 1%); }
+  80%       { transform: translate(3%, 3%); }
+  90%       { transform: translate(-2%, -1%); }
+}
+
+/* ── Utility: Outline Text (poster style) ── */
+.text-outline {
+  -webkit-text-stroke: 1.5px var(--color-outline-stroke);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.text-outline-red {
+  -webkit-text-stroke: 1.5px var(--color-red);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── Framer Motion layout animation smoothing ── */
+.framer-layout { will-change: transform; }
+
+/* ── Form Focus Ring ── */
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--color-red);
+}
+
+/* ── Prevent FOUC on images ── */
+img { transition: filter 0.7s ease; }
+
+/* ── Theme transition for bg-dependent Tailwind classes ── */
+.theme-transition {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
