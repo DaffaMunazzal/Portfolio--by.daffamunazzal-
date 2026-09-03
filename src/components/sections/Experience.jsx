@@ -1,16 +1,14 @@
 /* src/components/sections/Experience.jsx
-   Vertical timeline section with:
+   Vertical timeline section:
    - GSAP ScrollTrigger: the connecting line "grows" as you scroll
    - Dots glow when their item enters the viewport
    - Stagger reveal for each timeline item
-   - i18n support
-   - Theme-aware via CSS variables */
+   - Consumes modular experience list & content from LanguageContext */
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GraduationCap, Briefcase, Award, Trophy } from "lucide-react";
-import { timelineItems } from "../../data/experience";
 import SectionTitle from "../ui/SectionTitle";
 import { useLanguage } from "../../context/LanguageContext";
 
@@ -94,7 +92,8 @@ function TimelineItem({ item, index }) {
 export default function Experience() {
   const lineRef = useRef(null);
   const sectionRef = useRef(null);
-  const { t } = useLanguage();
+  const { content, experience } = useLanguage();
+  const expText = content.experience;
 
   // GSAP: animate the timeline line growing from top to bottom
   useEffect(() => {
@@ -123,9 +122,9 @@ export default function Experience() {
 
       <div className="relative mx-auto max-w-7xl">
         <SectionTitle
-          label={t("experience.label")}
-          title={t("experience.title")}
-          outlineTitle={t("experience.outlineTitle")}
+          label={expText.sectionLabel}
+          title={expText.title}
+          outlineTitle={expText.outlineTitle}
           className="mb-16 md:mb-24"
         />
 
@@ -139,7 +138,7 @@ export default function Experience() {
 
           {/* Items */}
           <div className="flex flex-col gap-8 lg:gap-12">
-            {timelineItems.map((item, index) => (
+            {experience.map((item, index) => (
               <TimelineItem key={item.id} item={item} index={index} />
             ))}
           </div>

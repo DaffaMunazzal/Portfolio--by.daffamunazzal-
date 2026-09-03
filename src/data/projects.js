@@ -7,9 +7,9 @@ export const projects = [
     title: "SHIFTCOMP - Company Profile Website",
     image: project1Img,
     shortDesc:
-      "Web-based academic management system for tracking student grades, attendance, and course schedules.",
+      "A company profile website for a computer and hardware store called SHIFTCOMP.",
     fullDesc:
-      "A full-stack academic information system built for a university faculty. Features role-based access control (Admin, Lecturer, Student), real-time grade input, attendance tracking with QR codes, and automated GPA calculation. Integrated with the university's existing student database via REST API.",
+      "SHIFTCOMP is a modern company profile website built for a computer hardware and accessories retailer. Built with React and Tailwind CSS featuring interactive product showcases and sleek modern styling.",
     category: "Web App",
     tech: ["HTML", "CSS", "REACT"],
     github: "https://github.com/DaffaMunazzal/Company-Profile-Shift.com.git",
@@ -19,16 +19,16 @@ export const projects = [
   },
   {
     id: 2,
-    title: "WasteTrack — Waste Management App",
+    title: "F1 DASHBOARD ANALYTICS",
     shortDesc:
-      "Mobile-first web app for tracking and reporting community waste collection in real-time.",
+      "A website dashboard built to display Formula 1 data and statistics in every season.",
     fullDesc:
-      "A Progressive Web App (PWA) enabling communities to report waste pickup requests, track truck locations via GPS integration, and view analytics on waste volume per area. Built with a React frontend and Node.js backend, using MongoDB for flexible document storage.",
+      "A dashboard built to display Formula 1 data and statistics in every season. Built with a React frontend and Tailwind CSS.",
     category: "Web App",
-    tech: ["React", "Node.js", "MongoDB", "Express", "PWA"],
-    github: "https://github.com",
-    demo: "https://demo.example.com",
-    year: "2024",
+    tech: ["React", "Tailwind CSS", "Python", "Node.js"],
+    github: "https://github.com/DaffaMunazzal/F1-Analyst-Dasboard.git",
+    demo: "https://f1-analyst-dashboard.vercel.app/",
+    year: "2026",
     featured: true,
   },
   {

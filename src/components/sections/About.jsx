@@ -1,10 +1,9 @@
 /* src/components/sections/About.jsx
-   About section with:
+   About section:
    - Two-column layout (photo left, text right)
    - Animated counting stats (GSAP CountTo on scroll enter)
    - Framer Motion text reveal
-   - i18n support
-   - Theme-aware via CSS variables */
+   - Consumes modular content from LanguageContext */
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
@@ -14,24 +13,6 @@ import { useLanguage } from "../../context/LanguageContext";
 import profileImg from "../../assets/images/profile.png";
 
 gsap.registerPlugin(ScrollTrigger);
-
-// TODO: REPLACE with your real information
-const BIO = {
-  name: "Muhammad Daffa Oemarqois Munazzal",                  // TODO
-  university: "Institut Widya Pratama",      // TODO
-  major: "Sistem Informasi",
-  year: "Semester 3, Angkatan 2025",  // TODO
-  interests: "Web Development, Database Management Systems, Machine Learning, UI/UX Design, dan Analisis Data",
-  value:
-    "Programming bukan hanya sebuah teknologi, namun bagian dari lifestyle",
-};
-
-const STATS_KEYS = [
-  { value: 12, suffix: "+", labelKey: "about.stat.projects" },
-  { value: 3, suffix: "", labelKey: "about.stat.semester" },
-  { value: 7, suffix: "+", labelKey: "about.stat.tech" },
-  { value: 3, suffix: "x", labelKey: "about.stat.cert" },
-];
 
 function Counter({ value, suffix }) {
   const ref = useRef(null);
@@ -72,7 +53,9 @@ const fadeUp = {
 };
 
 export default function About() {
-  const { t } = useLanguage();
+  const { content } = useLanguage();
+  const { about } = content;
+  const { bio, stats } = about;
 
   return (
     <section id="about" className="relative bg-[var(--color-void)] px-6 py-28 md:px-12 lg:py-40">
@@ -81,7 +64,12 @@ export default function About() {
 
       <div className="relative mx-auto max-w-7xl">
         {/* Section header */}
-        <SectionTitle label={t("about.label")} title={t("about.title")} outlineTitle={t("about.outlineTitle")} className="mb-16 md:mb-24" />
+        <SectionTitle
+          label={about.sectionLabel}
+          title={about.title}
+          outlineTitle={about.outlineTitle}
+          className="mb-16 md:mb-24"
+        />
 
         <div className="grid items-start gap-16 lg:grid-cols-2 lg:gap-24">
           {/* Left — Photo */}
@@ -98,7 +86,7 @@ export default function About() {
               <div className="absolute -bottom-3 -right-3 h-24 w-24 border-b-2 border-r-2 border-red-drama/40 z-10" />
               <img
                 src={profileImg}
-                alt="Rizky Adriansyah — Sistem Informasi Student"
+                alt={`${bio.name} — ${bio.major}`}
                 className="w-full object-contain grayscale hover:grayscale-0 transition-all duration-700"
               />
             </div>
@@ -108,12 +96,11 @@ export default function About() {
           <div className="flex flex-col gap-8">
             <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <p className="font-body text-lg leading-relaxed text-[var(--color-bone-dim)]">
-                {t("about.greeting")}
-                <span className="font-semibold text-[var(--color-bone)]">{BIO.name}</span>
-                {t("about.student")}
-                <span className="text-red-drama">{BIO.major}</span>
-                {t("about.at")}
-                <span className="font-semibold text-[var(--color-bone)]">{BIO.university}</span> ({BIO.year}).
+                {bio.story1
+                  .replace("{name}", bio.name)
+                  .replace("{major}", bio.major)
+                  .replace("{university}", bio.university)
+                  .replace("{year}", bio.year)}
               </p>
             </motion.div>
 
@@ -125,7 +112,7 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              {t("about.interests.prefix")}<span className="text-[var(--color-bone)]">{BIO.interests}</span>{t("about.interests.suffix")}
+              {bio.story2.replace("{interests}", bio.interests)}
             </motion.p>
 
             <motion.blockquote
@@ -136,7 +123,7 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              "{BIO.value}"
+              "{bio.value}"
             </motion.blockquote>
 
             {/* Divider */}
@@ -144,9 +131,9 @@ export default function About() {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              {STATS_KEYS.map(({ value, suffix, labelKey }, i) => (
+              {stats.map(({ value, suffix, label }, i) => (
                 <motion.div
-                  key={labelKey}
+                  key={label}
                   className="flex flex-col gap-1"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -155,7 +142,7 @@ export default function About() {
                 >
                   <Counter value={value} suffix={suffix} />
                   <span className="font-body text-xs uppercase tracking-widest text-[var(--color-faint)]">
-                    {t(labelKey)}
+                    {label}
                   </span>
                 </motion.div>
               ))}

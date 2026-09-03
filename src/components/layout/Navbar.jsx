@@ -1,9 +1,10 @@
 /* src/components/layout/Navbar.jsx
    Fixed navbar:
-   - Left corner: Logo / initials
+   - Left corner: Logo
    - Center (desktop): horizontal links with animated underline
-   - Right corner: Dark/Light toggle + Language dropdown (with crisp SVG flags) + Mobile Hamburger
-   - Mobile: full-screen animated overlay menu */
+   - Right corner: Dark/Light toggle + Language dropdown (with SVG flags) + Mobile Hamburger
+   - Mobile: full-screen animated overlay menu
+   - Consumes modular content.nav from LanguageContext */
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
@@ -13,8 +14,14 @@ import FlagIcon from "../ui/FlagIcon";
 import logoPutih from "../../assets/images/logo-website-putih.png";
 import logoHitam from "../../assets/images/logo-website-hitam.png";
 
-const navKeys = ["nav.home", "nav.about", "nav.skills", "nav.projects", "nav.experience", "nav.contact"];
-const navHrefs = ["#home", "#about", "#skills", "#projects", "#experience", "#contact"];
+const navConfig = [
+  { key: "home", href: "#home" },
+  { key: "about", href: "#about" },
+  { key: "skills", href: "#skills" },
+  { key: "projects", href: "#projects" },
+  { key: "experience", href: "#experience" },
+  { key: "contact", href: "#contact" },
+];
 
 const menuVariants = {
   closed: { clipPath: "inset(0 0 100% 0)", transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
@@ -37,7 +44,8 @@ export default function Navbar() {
   const langRef = useRef(null);
 
   const { theme, toggleTheme } = useTheme();
-  const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, content } = useLanguage();
+  const navText = content.nav || {};
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -69,9 +77,9 @@ export default function Navbar() {
     }, 400);
   };
 
-  const navLinks = navKeys.map((key, i) => ({
-    label: t(key),
-    href: navHrefs[i],
+  const navLinks = navConfig.map(({ key, href }) => ({
+    label: navText[key] || key,
+    href,
   }));
 
   return (
@@ -257,7 +265,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
               className="absolute bottom-8 left-8 font-body text-xs uppercase tracking-ultra-wide text-[var(--color-faint)]"
             >
-              {t("nav.decoration")}
+              {navText.decoration || "Information Systems Portfolio"}
             </motion.p>
           </motion.div>
         )}

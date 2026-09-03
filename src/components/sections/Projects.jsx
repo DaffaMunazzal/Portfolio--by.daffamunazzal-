@@ -1,22 +1,20 @@
 /* src/components/sections/Projects.jsx
-   Projects grid with:
+   Projects grid:
    - Category filter tabs with AnimatePresence transitions
    - 3-col desktop / 1-col mobile grid
    - Card tap/hover effects
    - Grayscale thumbnail → color on hover
    - Opens ProjectModal with layoutId shared animation
-   - i18n support
-   - Theme-aware via CSS variables */
+   - Consumes modular projects & content from LanguageContext */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Eye } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import { projects, projectCategories } from "../../data/projects";
 import SectionTitle from "../ui/SectionTitle";
 import ProjectModal from "./ProjectModal";
 import { useLanguage } from "../../context/LanguageContext";
 
-function ProjectCard({ project, onOpen, t }) {
+function ProjectCard({ project, onOpen, projectsText }) {
   return (
     <motion.article
       className="group relative flex cursor-pointer flex-col gap-4 overflow-hidden rounded-sm bg-[var(--color-surface-2)] border border-[var(--color-white-5)] hover:border-red-drama/30 transition-all duration-300 shadow-card hover:shadow-card-hover"
@@ -51,7 +49,7 @@ function ProjectCard({ project, onOpen, t }) {
           >
             <Eye size={14} className="text-[var(--color-bone)]" />
             <span className="font-body text-xs font-medium uppercase tracking-widest text-[var(--color-bone)]">
-              {t("projects.view")}
+              {projectsText.view}
             </span>
           </motion.div>
         </div>
@@ -66,7 +64,7 @@ function ProjectCard({ project, onOpen, t }) {
         {project.featured && (
           <div className="absolute right-4 top-4">
             <span className="rounded-sm bg-[var(--color-bone)]/10 backdrop-blur-sm px-2 py-1 font-body text-[10px] font-semibold uppercase tracking-widest text-[var(--color-bone)]/70">
-              {t("projects.featured")}
+              {projectsText.featured}
             </span>
           </div>
         )}
@@ -115,7 +113,7 @@ function ProjectCard({ project, onOpen, t }) {
               className="text-[var(--color-faint)] hover:text-[var(--color-bone)] transition-colors duration-200"
               aria-label="GitHub repository"
             >
-          <FaGithub size={16} />
+              <FaGithub size={16} />
             </a>
           )}
           {project.demo && (
@@ -131,7 +129,7 @@ function ProjectCard({ project, onOpen, t }) {
             </a>
           )}
           <span className="ml-auto font-body text-xs uppercase tracking-widest text-[var(--color-faint)] group-hover:text-[var(--color-bone)] transition-colors duration-200">
-            {t("projects.viewDetails")}
+            {projectsText.viewDetails}
           </span>
         </div>
       </div>
@@ -140,12 +138,17 @@ function ProjectCard({ project, onOpen, t }) {
 }
 
 export default function Projects() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [selectedProject, setSelectedProject] = useState(null);
-  const { t } = useLanguage();
+  const { content, projects } = useLanguage();
+  const projectsText = content.projects;
+  const categories = projectsText.categories || ["All", "Web App", "Data Analysis", "UI/UX"];
+  const allLabel = projectsText.allCategory || categories[0];
 
+  const [activeCategory, setActiveCategory] = useState(allLabel);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  // Filter projects by category
   const filtered =
-    activeCategory === "All"
+    activeCategory === allLabel || activeCategory === "All" || activeCategory === "Semua" || activeCategory === "Alle"
       ? projects
       : projects.filter((p) => p.category === activeCategory);
 
@@ -157,34 +160,39 @@ export default function Projects() {
 
         <div className="relative mx-auto max-w-7xl">
           <SectionTitle
-            label={t("projects.label")}
-            title={t("projects.title")}
-            outlineTitle={t("projects.outlineTitle")}
+            label={projectsText.sectionLabel}
+            title={projectsText.title}
+            outlineTitle={projectsText.outlineTitle}
             className="mb-12"
           />
 
           {/* Filter Tabs */}
           <div className="mb-12 flex flex-wrap gap-2">
-            {projectCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`relative px-5 py-2 font-body text-xs font-semibold uppercase tracking-ultra-wide transition-colors duration-200 rounded-sm ${
-                  activeCategory === cat
-                    ? "text-white"
-                    : "text-[var(--color-faint)] hover:text-[var(--color-muted)]"
-                }`}
-              >
-                {activeCategory === cat && (
-                  <motion.div
-                    layoutId="filter-pill"
-                    className="absolute inset-0 rounded-sm bg-red-drama"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{cat}</span>
-              </button>
-            ))}
+            {categories.map((cat, i) => {
+              const isSelected =
+                activeCategory === cat ||
+                (i === 0 && (activeCategory === "All" || activeCategory === "Semua" || activeCategory === "Alle"));
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`relative px-5 py-2 font-body text-xs font-semibold uppercase tracking-ultra-wide transition-colors duration-200 rounded-sm ${
+                    isSelected
+                      ? "text-white"
+                      : "text-[var(--color-faint)] hover:text-[var(--color-muted)]"
+                  }`}
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="filter-pill"
+                      className="absolute inset-0 rounded-sm bg-red-drama"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{cat}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Projects Grid */}
@@ -195,7 +203,7 @@ export default function Projects() {
                   key={project.id}
                   project={project}
                   onOpen={setSelectedProject}
-                  t={t}
+                  projectsText={projectsText}
                 />
               ))}
             </AnimatePresence>

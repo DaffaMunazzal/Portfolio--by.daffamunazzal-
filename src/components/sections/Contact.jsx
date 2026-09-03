@@ -1,11 +1,10 @@
 /* src/components/sections/Contact.jsx
-   Full-viewport contact section with:
+   Full-viewport contact section:
    - Giant outline text CTA
    - Simple contact form
    - Social icon row with magnetic effect
    - Magnetic buttons on CTAs
-   - i18n support
-   - Theme-aware via CSS variables */
+   - Consumes modular content.contact from LanguageContext */
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Send, CheckCircle } from "lucide-react";
@@ -18,10 +17,10 @@ import { useLanguage } from "../../context/LanguageContext";
 
 // TODO: REPLACE with your real contact info
 const CONTACT = {
-  email: "yourname@email.com",                    // TODO
-  github: "https://github.com/yourusername",      // TODO
-  linkedin: "https://linkedin.com/in/yourusername", // TODO
-  instagram: "https://instagram.com/yourusername", // TODO
+  email: "yourname@email.com",
+  github: "https://github.com/DaffaMunazzal",
+  linkedin: "https://linkedin.com/in/yourusername",
+  instagram: "https://instagram.com/yourusername",
 };
 
 const socials = [
@@ -37,7 +36,9 @@ export default function Contact() {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { t } = useLanguage();
+  const { content } = useLanguage();
+  const contactText = content.contact;
+  const { form } = contactText;
 
   const handleChange = (e) =>
     setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -72,12 +73,12 @@ export default function Contact() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              {t("contact.label")}
+              {contactText.sectionLabel}
             </motion.p>
 
             {/* Giant stacked title */}
             <div className="overflow-hidden">
-              {[t("contact.title1"), t("contact.title2")].map((line, i) => (
+              {[contactText.title1, contactText.title2].map((line, i) => (
                 <div key={i} className="overflow-hidden">
                   <motion.div
                     className={`font-display text-poster-xl uppercase leading-none tracking-poster ${
@@ -116,7 +117,7 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
             >
-              {t("contact.subtitle")}
+              {contactText.subtitle}
             </motion.p>
           </div>
 
@@ -133,10 +134,10 @@ export default function Contact() {
                 <div className="flex flex-col items-center justify-center gap-4 rounded-sm border border-red-drama/30 bg-red-drama/5 p-12 text-center">
                   <CheckCircle className="text-red-drama" size={48} />
                   <h3 className="font-display text-2xl uppercase tracking-poster text-[var(--color-bone)]">
-                    {t("contact.sent.title")}
+                    {form.sentTitle}
                   </h3>
                   <p className="font-body text-sm text-[var(--color-muted)]">
-                    {t("contact.sent.desc")}
+                    {form.sentDesc}
                   </p>
                 </div>
               ) : (
@@ -144,13 +145,13 @@ export default function Contact() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label className="mb-2 block font-body text-xs uppercase tracking-widest text-[var(--color-faint)]">
-                        {t("contact.name")}
+                        {form.name}
                       </label>
                       <input
                         type="text"
                         name="name"
                         required
-                        placeholder={t("contact.namePlaceholder")}
+                        placeholder={form.namePlaceholder}
                         value={formState.name}
                         onChange={handleChange}
                         className={inputClass}
@@ -158,13 +159,13 @@ export default function Contact() {
                     </div>
                     <div>
                       <label className="mb-2 block font-body text-xs uppercase tracking-widest text-[var(--color-faint)]">
-                        {t("contact.email")}
+                        {form.email}
                       </label>
                       <input
                         type="email"
                         name="email"
                         required
-                        placeholder="email@example.com"
+                        placeholder={form.emailPlaceholder}
                         value={formState.email}
                         onChange={handleChange}
                         className={inputClass}
@@ -174,13 +175,13 @@ export default function Contact() {
 
                   <div>
                     <label className="mb-2 block font-body text-xs uppercase tracking-widest text-[var(--color-faint)]">
-                      {t("contact.message")}
+                      {form.message}
                     </label>
                     <textarea
                       name="message"
                       rows={5}
                       required
-                      placeholder={t("contact.messagePlaceholder")}
+                      placeholder={form.messagePlaceholder}
                       value={formState.message}
                       onChange={handleChange}
                       className={`${inputClass} resize-none`}
@@ -194,11 +195,11 @@ export default function Contact() {
                     disabled={loading}
                   >
                     {loading ? (
-                      t("contact.sending")
+                      form.sending
                     ) : (
                       <>
                         <Send size={15} />
-                        {t("contact.send")}
+                        {form.send}
                       </>
                     )}
                   </Button>
@@ -217,7 +218,7 @@ export default function Contact() {
               {/* Email */}
               <div>
                 <p className="mb-2 font-body text-xs uppercase tracking-ultra-wide text-[var(--color-faint)]">
-                  {t("contact.email")}
+                  Email
                 </p>
                 <a
                   href={`mailto:${CONTACT.email}`}
@@ -236,7 +237,7 @@ export default function Contact() {
               {/* Socials */}
               <div>
                 <p className="mb-4 font-body text-xs uppercase tracking-ultra-wide text-[var(--color-faint)]">
-                  {t("contact.findMe")}
+                  {contactText.findMe}
                 </p>
                 <div className="flex gap-4">
                   {socials.map(({ Icon, href, label }) => (
@@ -266,10 +267,10 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="font-body text-sm font-semibold text-[var(--color-bone)]">
-                    {t("contact.available.title")}
+                    {contactText.availableTitle}
                   </p>
                   <p className="mt-1 font-body text-xs leading-relaxed text-[var(--color-faint)]">
-                    {t("contact.available.desc")}
+                    {contactText.availableDesc}
                   </p>
                 </div>
               </div>

@@ -1,14 +1,13 @@
 /* src/components/sections/Hero.jsx
-   Full-viewport hero section with:
+   Full-viewport hero section:
    - Stacked poster typography (solid + outline text)
    - Grayscale profile photo with cinematic crop
    - Animated red radial spotlight that parallaxes with scroll
    - Mouse-tracking subtle light movement
    - "SCROLL" bounce indicator
-   - Theme-aware outline text via CSS variable
-   - i18n support */
+   - Consumes modular content.hero from LanguageContext */
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useMousePosition from "../../hooks/useMousePosition";
@@ -18,15 +17,12 @@ import profileImg from "../../assets/images/profile.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// TODO: REPLACE with your actual name and tagline
-const NAME_LINE1 = "DAFFA";
-const NAME_LINE2 = "MUNAZZAL";
-
 export default function Hero() {
   const sectionRef = useRef(null);
   const mouse = useMousePosition();
   const isMobile = useIsMobile();
-  const { t } = useLanguage();
+  const { content } = useLanguage();
+  const heroText = content.hero;
 
   // Scroll-based parallax for the spotlight
   const { scrollYProgress } = useScroll({
@@ -102,20 +98,20 @@ export default function Hero() {
       {/* ───────── Text Content ───────── */}
       <div className="relative z-20 w-full px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl">
-          {/* Label */}
+          {/* Label / Role */}
           <motion.p
             className="mb-4 font-body text-xs font-semibold uppercase tracking-ultra-wide text-red-drama"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {t("hero.label")}
+            {heroText.role}
           </motion.p>
 
           {/* Name — Solid Layer (layer 1) */}
           <div className="overflow-hidden">
             <div className="hero-title-reveal font-display text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]">
-              {NAME_LINE1}
+              {heroText.nameLine1}
             </div>
           </div>
 
@@ -129,7 +125,7 @@ export default function Hero() {
                 color: "transparent",
               }}
             >
-              {NAME_LINE2}
+              {heroText.nameLine2}
             </div>
           </div>
 
@@ -141,31 +137,11 @@ export default function Hero() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-              {t("hero.tagline")}
+              {heroText.tagline}
             </motion.p>
           </div>
         </div>
       </div>
-
-      {/* ───────── Scroll Indicator ───────── */}
-      <motion.div
-        className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.6 }}
-      >
-        <span className="font-body text-[10px] uppercase tracking-ultra-wide text-[var(--color-faint)]">
-          ↓
-        </span>
-        {/* Animated bouncing chevron */}
-        <motion.div
-          className="flex h-8 w-5 items-start justify-center rounded-full border border-[var(--color-faint)]/40 pt-1.5"
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="h-1.5 w-1.5 rounded-full bg-red-drama" />
-        </motion.div>
-      </motion.div>
 
       {/* ───────── Hairline Bottom Border ───────── */}
       <div className="absolute bottom-0 left-0 h-px w-full bg-[var(--color-white-5)]" />

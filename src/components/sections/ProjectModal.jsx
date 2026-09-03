@@ -2,16 +2,17 @@
    Full-screen modal for project details.
    Uses Framer Motion layoutId for shared-layout animation from card to modal.
    Closes on backdrop click or Escape key.
-   i18n support + theme-aware via CSS variables */
+   Consumes modular modal text from LanguageContext */
 import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, ChevronRight } from "lucide-react";
+import { X, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Button from "../ui/Button";
 import { useLanguage } from "../../context/LanguageContext";
 
 export default function ProjectModal({ project, onClose }) {
-  const { t } = useLanguage();
+  const { content } = useLanguage();
+  const modalText = content.modal || { techStack: "Tech Stack", liveDemo: "Live Demo" };
 
   // Close on Escape key
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function ProjectModal({ project, onClose }) {
                 {/* Tech stack */}
                 <div>
                   <p className="mb-3 font-body text-xs uppercase tracking-ultra-wide text-[var(--color-faint)]">
-                    {t("modal.techStack")}
+                    {modalText.techStack}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((techItem) => (
@@ -120,14 +121,14 @@ export default function ProjectModal({ project, onClose }) {
                 <div className="flex flex-wrap gap-4">
                   {project.github && (
                     <Button href={project.github} variant="outline" external className="gap-2">
-                    <FaGithub size={16} />
+                      <FaGithub size={16} />
                       GitHub
                     </Button>
                   )}
                   {project.demo && (
                     <Button href={project.demo} variant="primary" external className="gap-2">
                       <ExternalLink size={16} />
-                      {t("modal.liveDemo")}
+                      {modalText.liveDemo}
                     </Button>
                   )}
                 </div>

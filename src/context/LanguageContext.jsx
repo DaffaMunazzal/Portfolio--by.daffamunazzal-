@@ -1,10 +1,9 @@
 /* src/context/LanguageContext.jsx
    Provides i18n state across the app.
-   - Persists preference in localStorage
-   - Exposes `lang`, `setLang`, and `t(key)` translator
+   - Exposes `lang`, `setLang`, `content` (active locale data), `projects`, `experience`, `skillGroups`, and `t(key)`
    - Default: "id" */
-import { createContext, useContext, useState, useCallback } from "react";
-import { translations } from "../data/translations";
+import { createContext, useContext, useState, useMemo, useCallback } from "react";
+import { locales, getProjects, getExperience, getSkillGroups } from "../data/locales";
 
 const LanguageContext = createContext();
 
@@ -25,18 +24,43 @@ export function LanguageProvider({ children }) {
     localStorage.setItem("portfolio-lang", code);
   };
 
+  // Active locale content object
+  const content = useMemo(() => locales[lang] || locales.id, [lang]);
+
+  // Derived merged lists
+  const projects = useMemo(() => getProjects(lang), [lang]);
+  const experience = useMemo(() => getExperience(lang), [lang]);
+  const skillGroups = useMemo(() => getSkillGroups(lang), [lang]);
+
+  // Dot-notation helper if needed: e.g. t('nav.home')
   const t = useCallback(
     (key) => {
-      const val = translations[lang]?.[key];
-      if (val !== undefined) return val;
-      // Fallback to ID, then the key itself
-      return translations.id?.[key] ?? key;
+      const parts = key.split(".");
+      let cur = content;
+      for (const p of parts) {
+        if (cur && cur[p] !== undefined) {
+          cur = cur[p];
+        } else {
+          return key;
+        }
+      }
+      return cur;
     },
-    [lang]
+    [content]
   );
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider
+      value={{
+        lang,
+        setLang,
+        content,
+        projects,
+        experience,
+        skillGroups,
+        t,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );

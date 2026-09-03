@@ -1,14 +1,12 @@
 /* src/components/sections/Skills.jsx
-   Skills section with:
+   Skills section:
    - 4 category cards in a stagger-reveal grid
    - 3D tilt effect on mouse move (desktop only)
    - Skill bars with scroll-triggered fill animation
-   - i18n support
-   - Theme-aware via CSS variables */
+   - Consumes modular skillGroups & content from LanguageContext */
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Code2, Database, BarChart3, Wrench } from "lucide-react";
-import { skillGroups } from "../../data/skills";
 import SectionTitle from "../ui/SectionTitle";
 import useIsMobile from "../../hooks/useIsMobile";
 import { useLanguage } from "../../context/LanguageContext";
@@ -24,7 +22,7 @@ function TiltCard({ children, className }) {
   const handleMouseMove = (e) => {
     if (isMobile) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 to 0.5
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     setTilt({ rotateX: -y * 12, rotateY: x * 12 });
   };
@@ -80,7 +78,8 @@ const cardVariants = {
 };
 
 export default function Skills() {
-  const { t } = useLanguage();
+  const { content, skillGroups } = useLanguage();
+  const { skills } = content;
 
   return (
     <section id="skills" className="relative bg-[var(--color-surface)] px-6 py-28 md:px-12 lg:py-40">
@@ -89,9 +88,9 @@ export default function Skills() {
 
       <div className="relative mx-auto max-w-7xl">
         <SectionTitle
-          label={t("skills.label")}
-          title={t("skills.title")}
-          outlineTitle={t("skills.outlineTitle")}
+          label={skills.sectionLabel}
+          title={skills.title}
+          outlineTitle={skills.outlineTitle}
           className="mb-16 md:mb-24"
         />
 
