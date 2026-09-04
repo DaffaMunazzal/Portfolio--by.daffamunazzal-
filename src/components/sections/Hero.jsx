@@ -95,12 +95,27 @@ export default function Hero() {
         />
       </motion.div>
 
+      {/* ───────── Mobile Text-Contrast Overlay ───────── */}
+      {/* Sits between photo (z-10) and text (z-20) to add a scrim for readability */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[15] md:hidden"
+        style={{
+          background:
+            "linear-gradient(to top, var(--color-void) 0%, color-mix(in srgb, var(--color-void) 75%, transparent) 35%, color-mix(in srgb, var(--color-void) 40%, transparent) 60%, transparent 100%)",
+        }}
+      />
+
       {/* ───────── Text Content ───────── */}
       <div className="relative z-20 w-full px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl">
           {/* Label / Role */}
           <motion.p
             className="mb-4 font-body text-xs font-semibold uppercase tracking-ultra-wide text-red-drama"
+            style={{
+              textShadow: isMobile
+                ? "0 0 12px var(--color-void), 0 0 24px var(--color-void)"
+                : undefined,
+            }}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -110,7 +125,14 @@ export default function Hero() {
 
           {/* Name — Solid Layer (layer 1) */}
           <div className="overflow-hidden">
-            <div className="hero-title-reveal font-display text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]">
+            <div
+              className="hero-title-reveal font-display text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]"
+              style={{
+                textShadow: isMobile
+                  ? "0 2px 20px var(--color-void), 0 0 40px var(--color-void)"
+                  : undefined,
+              }}
+            >
               {heroText.nameLine1}
             </div>
           </div>
@@ -123,6 +145,9 @@ export default function Hero() {
                 WebkitTextStroke: "1.5px var(--color-outline-stroke)",
                 WebkitTextFillColor: "transparent",
                 color: "transparent",
+                filter: isMobile
+                  ? "drop-shadow(0 0 8px var(--color-void)) drop-shadow(0 0 16px var(--color-void))"
+                  : undefined,
               }}
             >
               {heroText.nameLine2}
@@ -133,6 +158,11 @@ export default function Hero() {
           <div className="overflow-hidden mt-3">
             <motion.p
               className="font-display text-poster-sm uppercase tracking-ultra-wide text-[var(--color-muted)]"
+              style={{
+                textShadow: isMobile
+                  ? "0 0 12px var(--color-void), 0 0 24px var(--color-void)"
+                  : undefined,
+              }}
               initial={{ y: "110%", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}

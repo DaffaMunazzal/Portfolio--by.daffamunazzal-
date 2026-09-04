@@ -86,11 +86,10 @@ export default function Navbar() {
     <>
       {/* Main Navbar */}
       <motion.nav
-        className={`fixed left-0 top-0 z-[9990] w-full px-6 py-4 transition-all duration-500 md:px-12 ${
-          scrolled
-            ? "bg-[var(--color-void)]/80 backdrop-blur-md border-b border-[var(--color-white-5)] shadow-lg"
-            : "bg-transparent"
-        }`}
+        className={`fixed left-0 top-0 z-[9990] w-full px-6 py-4 transition-all duration-500 md:px-12 ${scrolled
+          ? "bg-[var(--color-void)]/80 backdrop-blur-md border-b border-[var(--color-white-5)] shadow-lg"
+          : "bg-transparent"
+          }`}
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -171,9 +170,8 @@ export default function Navbar() {
                 <FlagIcon code={lang} className="w-5 h-3.5" />
                 <ChevronDown
                   size={12}
-                  className={`text-[var(--color-faint)] transition-transform duration-300 ${
-                    langDropdownOpen ? "rotate-180" : ""
-                  }`}
+                  className={`text-[var(--color-faint)] transition-transform duration-300 ${langDropdownOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -194,11 +192,10 @@ export default function Navbar() {
                           setLang(langItem.code);
                           setLangDropdownOpen(false);
                         }}
-                        className={`flex items-center gap-2.5 rounded-full px-3.5 py-2 font-body text-sm transition-all duration-200 ${
-                          lang === langItem.code
-                            ? "bg-red-drama/15 text-red-drama font-medium border border-red-drama/30"
-                            : "text-[var(--color-muted)] hover:bg-[var(--color-white-5)] hover:text-[var(--color-bone)] border border-transparent"
-                        }`}
+                        className={`flex items-center gap-2.5 rounded-full px-3.5 py-2 font-body text-sm transition-all duration-200 ${lang === langItem.code
+                          ? "bg-red-drama/15 text-red-drama font-medium border border-red-drama/30"
+                          : "text-[var(--color-muted)] hover:bg-[var(--color-white-5)] hover:text-[var(--color-bone)] border border-transparent"
+                          }`}
                       >
                         {/* Country Flag SVG */}
                         <FlagIcon code={langItem.code} className="w-5 h-3.5" />
@@ -265,7 +262,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
               className="absolute bottom-8 left-8 font-body text-xs uppercase tracking-ultra-wide text-[var(--color-faint)]"
             >
-              {navText.decoration || "Information Systems Portfolio"}
+              {navText.decoration || "Daffa Munazzal's Portfolio"}
             </motion.p>
           </motion.div>
         )}

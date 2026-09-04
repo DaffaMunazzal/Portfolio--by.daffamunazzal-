@@ -17,10 +17,10 @@ import { useLanguage } from "../../context/LanguageContext";
 
 // TODO: REPLACE with your real contact info
 const CONTACT = {
-  email: "yourname@email.com",
+  email: "daffaoemarqoismz@email.com",
   github: "https://github.com/DaffaMunazzal",
-  linkedin: "https://linkedin.com/in/yourusername",
-  instagram: "https://instagram.com/yourusername",
+  linkedin: "https://www.linkedin.com/in/daffamunazzal/",
+  instagram: "https://instagram.com/daffa_mnzal",
 };
 
 const socials = [
@@ -81,18 +81,17 @@ export default function Contact() {
               {[contactText.title1, contactText.title2].map((line, i) => (
                 <div key={i} className="overflow-hidden">
                   <motion.div
-                    className={`font-display text-poster-xl uppercase leading-none tracking-poster ${
-                      i === 1
-                        ? ""
-                        : "text-[var(--color-bone)]"
-                    }`}
+                    className={`font-display text-poster-xl uppercase leading-none tracking-poster ${i === 1
+                      ? ""
+                      : "text-[var(--color-bone)]"
+                      }`}
                     style={
                       i === 1
                         ? {
-                            WebkitTextStroke: "1.5px var(--color-outline-stroke)",
-                            WebkitTextFillColor: "transparent",
-                            color: "transparent",
-                          }
+                          WebkitTextStroke: "1.5px var(--color-outline-stroke)",
+                          WebkitTextFillColor: "transparent",
+                          color: "transparent",
+                        }
                         : {}
                     }
                     initial={{ y: "110%" }}
