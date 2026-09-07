@@ -55,7 +55,7 @@ export default function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative flex h-screen min-h-[600px] w-full items-end overflow-hidden bg-[var(--color-void)] pb-16"
+      className="relative flex min-h-[100svh] min-h-[100vh] w-full items-end overflow-hidden bg-[var(--color-void)] pb-12 md:pb-16"
     >
       {/* ───────── Red Spotlight Background ───────── */}
       <motion.div
@@ -64,7 +64,7 @@ export default function Hero() {
       >
         {/* Primary spotlight — center/right */}
         <motion.div
-          className="absolute right-[5%] top-[10%] h-[70vh] w-[60vw] rounded-full bg-red-drama opacity-20 blur-[160px]"
+          className="absolute right-[5%] top-[10%] h-[60vh] w-[80vw] md:h-[70vh] md:w-[60vw] rounded-full bg-red-drama opacity-20 blur-[100px] md:blur-[160px]"
           animate={
             isMobile
               ? {}
@@ -76,18 +76,17 @@ export default function Hero() {
           transition={{ type: "spring", stiffness: 30, damping: 20 }}
         />
         {/* Secondary dimmer spotlight — left edge */}
-        <div className="absolute -left-20 top-1/3 h-[40vh] w-[30vw] rounded-full bg-red-deep opacity-10 blur-[120px]" />
+        <div className="absolute -left-20 top-1/3 h-[30vh] w-[40vw] md:h-[40vh] md:w-[30vw] rounded-full bg-red-deep opacity-10 blur-[80px] md:blur-[120px]" />
       </motion.div>
 
       {/* ───────── Profile Photo ───────── */}
       <motion.div
-        className="pointer-events-none absolute bottom-0 right-[5%] z-10 h-[88vh] w-auto md:right-[8%]"
+        className="pointer-events-none absolute bottom-0 right-0 z-10 h-[65%] w-[70%] md:h-[88vh] md:w-auto md:right-[8%]"
         style={{ y: photoY }}
       >
         <img
           src={profileImg}
-          alt="Profile photo"
-          className="h-full w-auto object-cover object-top grayscale"
+          className="h-full w-full object-cover object-top grayscale md:w-auto"
           style={{
             maskImage: "linear-gradient(to top, transparent 0%, black 25%)",
             WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 25%)",
@@ -106,7 +105,7 @@ export default function Hero() {
       />
 
       {/* ───────── Text Content ───────── */}
-      <div className="relative z-20 w-full px-6 md:px-12 lg:px-20">
+      <div className="relative z-20 w-full px-5 md:px-12 lg:px-20">
         <div className="max-w-7xl">
           {/* Label / Role */}
           <motion.p
@@ -126,7 +125,7 @@ export default function Hero() {
           {/* Name — Solid Layer (layer 1) */}
           <div className="overflow-hidden">
             <div
-              className="hero-title-reveal font-display text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]"
+              className="hero-title-reveal font-display text-[clamp(2.8rem,12vw,5rem)] md:text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]"
               style={{
                 textShadow: isMobile
                   ? "0 2px 20px var(--color-void), 0 0 40px var(--color-void)"
@@ -140,9 +139,9 @@ export default function Hero() {
           {/* Name — Outline Layer (layer 2, overlapping slightly) */}
           <div className="overflow-hidden -mt-[0.05em]">
             <div
-              className="hero-title-reveal font-display text-poster-xl uppercase leading-none tracking-poster"
+              className="hero-title-reveal font-display text-[clamp(2.8rem,12vw,5rem)] md:text-poster-xl uppercase leading-none tracking-poster"
               style={{
-                WebkitTextStroke: "1.5px var(--color-outline-stroke)",
+                WebkitTextStroke: isMobile ? "1px var(--color-outline-stroke)" : "1.5px var(--color-outline-stroke)",
                 WebkitTextFillColor: "transparent",
                 color: "transparent",
                 filter: isMobile
@@ -157,7 +156,7 @@ export default function Hero() {
           {/* Tagline */}
           <div className="overflow-hidden mt-3">
             <motion.p
-              className="font-display text-poster-sm uppercase tracking-ultra-wide text-[var(--color-muted)]"
+              className="font-display text-[clamp(1.5rem,5vw,2.5rem)] md:text-poster-sm uppercase tracking-ultra-wide text-[var(--color-muted)]"
               style={{
                 textShadow: isMobile
                   ? "0 0 12px var(--color-void), 0 0 24px var(--color-void)"

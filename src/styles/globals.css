@@ -59,6 +59,16 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  /* Use small-viewport height so 100svh excludes mobile address bar */
+  --vh-unit: 1svh;
+}
+
+/* Fallback for browsers without svh support */
+@supports not (height: 1svh) {
+  html {
+    --vh-unit: 1vh;
+  }
 }
 
 body {
@@ -67,6 +77,10 @@ body {
   font-family: var(--font-body);
   overflow-x: hidden;
   transition: background-color 0.4s ease, color 0.4s ease;
+  /* Prevent horizontal overflow on mobile */
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh; /* fallback */
 }
 
 /* ── Custom Scrollbar ── */
@@ -118,15 +132,40 @@ img {
 
 /* ── Utility: Outline Text (poster style) ── */
 .text-outline {
-  -webkit-text-stroke: 1.5px var(--color-outline-stroke);
+  -webkit-text-stroke: 1px var(--color-outline-stroke);
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
 .text-outline-red {
-  -webkit-text-stroke: 1.5px var(--color-red);
+  -webkit-text-stroke: 1px var(--color-red);
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+/* Scale outline stroke up on larger screens */
+@media (min-width: 768px) {
+  .text-outline {
+    -webkit-text-stroke: 1.5px var(--color-outline-stroke);
+  }
+  .text-outline-red {
+    -webkit-text-stroke: 1.5px var(--color-red);
+  }
+}
+
+/* ── Mobile Responsive Utilities ── */
+@media (max-width: 767px) {
+  /* Ensure images are crisp on high-DPI mobile screens */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  /* Prevent text from being too small on mobile */
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 }
 
 /* ── Framer Motion layout animation smoothing ── */

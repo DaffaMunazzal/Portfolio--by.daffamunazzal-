@@ -46,7 +46,7 @@ export default function ProjectModal({ project, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-4 z-[9960] overflow-y-auto rounded-sm bg-[var(--color-surface-2)] border border-[var(--color-white-10)] shadow-card-hover md:inset-8 lg:inset-16"
+            className="fixed inset-2 z-[9960] overflow-y-auto rounded-sm bg-[var(--color-surface-2)] border border-[var(--color-white-10)] shadow-card-hover sm:inset-4 md:inset-8 lg:inset-16"
           >
             {/* Close button */}
             <button

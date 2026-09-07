@@ -47,7 +47,7 @@ export default function SectionTitle({
       {/* Main title — word-by-word reveal */}
       <div className="overflow-hidden">
         <div
-          className={`font-display uppercase leading-none text-${titleSize} flex flex-wrap gap-x-[0.2em]`}
+          className={`font-display uppercase leading-none text-[clamp(2rem,8vw,4rem)] md:text-${titleSize} flex flex-wrap gap-x-[0.2em]`}
         >
           {words.map((word, i) => (
             <div key={i} className="overflow-hidden">
@@ -70,7 +70,7 @@ export default function SectionTitle({
       {outlineTitle && (
         <div className="overflow-hidden -mt-[0.05em]">
           <div
-            className={`font-display uppercase leading-none text-${titleSize} flex flex-wrap gap-x-[0.2em]`}
+            className={`font-display uppercase leading-none text-[clamp(2rem,8vw,4rem)] md:text-${titleSize} flex flex-wrap gap-x-[0.2em]`}
           >
             {outlineTitle.split(" ").map((word, i) => (
               <div key={i} className="overflow-hidden">
@@ -82,7 +82,7 @@ export default function SectionTitle({
                   viewport={{ once: true, amount: 0.3 }}
                   className="block"
                   style={{
-                    WebkitTextStroke: "1.5px var(--color-outline-stroke)",
+                    WebkitTextStroke: "clamp(0.8px, 0.15vw, 1.5px) var(--color-outline-stroke)",
                     WebkitTextFillColor: "transparent",
                     color: "transparent",
                   }}

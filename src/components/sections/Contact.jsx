@@ -81,14 +81,14 @@ export default function Contact() {
               {[contactText.title1, contactText.title2].map((line, i) => (
                 <div key={i} className="overflow-hidden">
                   <motion.div
-                    className={`font-display text-poster-xl uppercase leading-none tracking-poster ${i === 1
+                    className={`font-display text-[clamp(2.8rem,12vw,5rem)] md:text-poster-xl uppercase leading-none tracking-poster ${i === 1
                       ? ""
                       : "text-[var(--color-bone)]"
                       }`}
                     style={
                       i === 1
                         ? {
-                          WebkitTextStroke: "1.5px var(--color-outline-stroke)",
+                          WebkitTextStroke: "clamp(0.8px, 0.15vw, 1.5px) var(--color-outline-stroke)",
                           WebkitTextFillColor: "transparent",
                           color: "transparent",
                         }
