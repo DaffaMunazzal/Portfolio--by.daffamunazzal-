@@ -22,6 +22,8 @@ export default {
     nameLine1: "DAFFA",
     nameLine2: "MUNAZZAL",
     tagline: "BUILD. THINK. DEPLOY.",
+    ctaProjects: "Lihat Projects ↓",
+    ctaCv: "Download CV",
   },
 
   // ─── ABOUT SECTION ───

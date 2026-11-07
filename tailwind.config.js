@@ -21,16 +21,17 @@ export default {
         "red-glow": "#FF2929",
       },
       fontFamily: {
-        display: ["'Bebas Neue'", "Anton", "Impact", "sans-serif"],
+        display: ["'Big Shoulders Display'", "'Saira Extra Condensed'", "'Barlow Condensed'", "sans-serif"],
         heading: ["'Playfair Display'", "Georgia", "serif"],
-        body: ["'Space Grotesk'", "Inter", "system-ui", "sans-serif"],
+        body: ["'Chakra Petch'", "'Space Grotesk'", "sans-serif"],
+        mono: ["'JetBrains Mono'", "'Space Mono'", "monospace"],
       },
       fontSize: {
-        // Poster-scale titles
-        "poster-sm": "clamp(2.5rem, 6vw, 5rem)",
-        "poster-md": "clamp(3.5rem, 8vw, 7rem)",
-        "poster-lg": "clamp(4rem, 10vw, 9rem)",
-        "poster-xl": "clamp(5rem, 14vw, 13rem)",
+        // Poster-scale titles — mobile-first with proportional scaling
+        "poster-sm": "clamp(1.75rem, 5vw, 5rem)",
+        "poster-md": "clamp(2.25rem, 7vw, 7rem)",
+        "poster-lg": "clamp(2.5rem, 8vw, 9rem)",
+        "poster-xl": "clamp(3rem, 12vw, 13rem)",
       },
       letterSpacing: {
         "ultra-wide": "0.3em",

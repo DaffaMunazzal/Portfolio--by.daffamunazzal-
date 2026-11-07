@@ -7,10 +7,11 @@
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import useLenis from "./hooks/useLenis";
-import CustomCursor from "./components/layout/CustomCursor";
 import Navbar from "./components/layout/Navbar";
 import ScrollProgress from "./components/ui/ScrollProgress";
 import NoiseOverlay from "./components/ui/NoiseOverlay";
+import TechStackMarquee from "./components/ui/TechStackMarquee";
+import IntroOverlay from "./components/hero/IntroOverlay";
 import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
 import Skills from "./components/sections/Skills";
@@ -24,10 +25,12 @@ function AppContent() {
 
   return (
     <>
+      {/* ── F1 Grand Prix Start Sequence Intro ── */}
+      <IntroOverlay />
+
       {/* ── Global UI Overlays ── */}
       <NoiseOverlay />
       <ScrollProgress />
-      <CustomCursor />
 
       {/* ── Navigation ── */}
       <Navbar />
@@ -35,6 +38,7 @@ function AppContent() {
       {/* ── Main Content ── */}
       <main>
         <Hero />
+        <TechStackMarquee />
         <About />
         <Skills />
         <Projects />

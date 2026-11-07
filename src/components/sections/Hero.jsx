@@ -1,179 +1,138 @@
 /* src/components/sections/Hero.jsx
-   Full-viewport hero section:
-   - Stacked poster typography (solid + outline text)
-   - Grayscale profile photo with cinematic crop
-   - Animated red radial spotlight that parallaxes with scroll
-   - Mouse-tracking subtle light movement
-   - "SCROLL" bounce indicator
-   - Consumes modular content.hero from LanguageContext */
-import { useEffect, useRef } from "react";
+   F1 Cockpit / Broadcast-Inspired Hero Section:
+   - Synchronized telemetry HUD layer & corner brackets
+   - Kinetic character reveal for "DAFFA" + interactive hover outline for "MUNAZZAL"
+   - Telemetry ScrambleText for "BUILD. THINK. DEPLOY." with alternating blinking dots
+   - Telemetry precision ruler with tick marks
+   - Skewed F1-style parallelogram CTA buttons (Lihat Projects & Download CV)
+   - Cursor-tracking grid spotlight & breathing red atmospheric glow
+   - Real-time reactive sync with large Matter.js Nametag (velocity skew & collision glitch)
+   - Centered vertical scroll telemetry indicator
+*/
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import useMousePosition from "../../hooks/useMousePosition";
-import useIsMobile from "../../hooks/useIsMobile";
 import { useLanguage } from "../../context/LanguageContext";
-import profileImg from "../../assets/images/profile.png";
+import useIsMobile from "../../hooks/useIsMobile";
+import useReducedMotion from "../../hooks/useReducedMotion";
 
-gsap.registerPlugin(ScrollTrigger);
+// Sub-components
+import InteractiveNametag from "../ui/InteractiveNametag";
+import HeroTitle from "../hero/HeroTitle";
+import ScrambleText from "../hero/ScrambleText";
+import TelemetryRuler from "../hero/TelemetryRuler";
+import HeroCTA from "../hero/HeroCTA";
+import HudLayer from "../hero/HudLayer";
+import GridSpotlight from "../hero/GridSpotlight";
 
 export default function Hero() {
   const sectionRef = useRef(null);
-  const mouse = useMousePosition();
   const isMobile = useIsMobile();
+  const prefersReduced = useReducedMotion();
   const { content } = useLanguage();
   const heroText = content.hero;
 
-  // Scroll-based parallax for the spotlight
+  const [isIntroFinished, setIsIntroFinished] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return Boolean(sessionStorage.getItem("f1_hero_intro_seen"));
+  });
+  const [titleRevealed, setTitleRevealed] = useState(false);
+  const [triggerSpeedLines, setTriggerSpeedLines] = useState(false);
+
+  // Scroll parallax for photo/nametag
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const spotlightY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const photoY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
-  // GSAP clip-path reveal on the name title (wipes in from bottom)
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".hero-title-reveal",
-        { clipPath: "inset(100% 0 0 0)", opacity: 0 },
-        {
-          clipPath: "inset(0% 0 0 0)",
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.15,
-          ease: "expo.out",
-          delay: 0.5,
-        }
-      );
-    }, sectionRef);
-    return () => ctx.revert();
+    const handleIntroComplete = () => {
+      setIsIntroFinished(true);
+      setTriggerSpeedLines(true);
+    };
+
+    const handleLightsOut = () => {
+      setTriggerSpeedLines(true);
+    };
+
+    window.addEventListener("f1:intro-complete", handleIntroComplete);
+    window.addEventListener("f1:lights-out", handleLightsOut);
+
+    return () => {
+      window.removeEventListener("f1:intro-complete", handleIntroComplete);
+      window.removeEventListener("f1:lights-out", handleLightsOut);
+    };
   }, []);
 
   return (
     <section
       id="home"
       ref={sectionRef}
-      className="relative flex min-h-[100svh] min-h-[100vh] w-full items-end overflow-hidden bg-[var(--color-void)] pb-12 md:pb-16"
+      className="relative flex min-h-[100svh] min-h-[100vh] w-full items-end md:items-center overflow-hidden bg-[var(--color-void)] pb-6 sm:pb-12 md:pb-16 pt-16 sm:pt-20 md:pt-24"
     >
-      {/* ───────── Red Spotlight Background ───────── */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ y: spotlightY }}
-      >
-        {/* Primary spotlight — center/right */}
+      {/* ───────── 1. Background Grid & Atmospheric Spotlight ───────── */}
+      <GridSpotlight triggerSpeedLines={triggerSpeedLines} />
+
+      {/* ───────── 2. F1 Cockpit HUD Telemetry Layer ───────── */}
+      <HudLayer isIntroFinished={isIntroFinished} />
+
+      {/* ───────── 3. Large Interactive Matter.js Lanyard Nametag ───────── */}
+      <div className="pointer-events-auto absolute top-8 sm:top-10 md:top-16 lg:top-20 left-0 right-0 md:left-auto md:right-[8%] lg:right-[13%] xl:right-[16%] z-20 flex justify-center md:block">
         <motion.div
-          className="absolute right-[5%] top-[10%] h-[60vh] w-[80vw] md:h-[70vh] md:w-[60vw] rounded-full bg-red-drama opacity-20 blur-[100px] md:blur-[160px]"
-          animate={
-            isMobile
-              ? {}
-              : {
-                x: mouse.x * 25,
-                y: mouse.y * 20,
-              }
-          }
-          transition={{ type: "spring", stiffness: 30, damping: 20 }}
-        />
-        {/* Secondary dimmer spotlight — left edge */}
-        <div className="absolute -left-20 top-1/3 h-[30vh] w-[40vw] md:h-[40vh] md:w-[30vw] rounded-full bg-red-deep opacity-10 blur-[80px] md:blur-[120px]" />
-      </motion.div>
+          className="flex justify-center items-start origin-top-center md:origin-top-right scale-[0.46] sm:scale-[0.55] md:scale-[0.88] lg:scale-[1.02] xl:scale-[1.10] transition-transform duration-300"
+          style={{ y: photoY }}
+        >
+          <InteractiveNametag />
+        </motion.div>
+      </div>
 
-      {/* ───────── Profile Photo ───────── */}
-      <motion.div
-        className="pointer-events-none absolute bottom-0 right-0 z-10 h-[65%] w-[70%] md:h-[88vh] md:w-auto md:right-[8%]"
-        style={{ y: photoY }}
-      >
-        <img
-          src={profileImg}
-          className="h-full w-full object-cover object-top grayscale md:w-auto"
-          style={{
-            maskImage: "linear-gradient(to top, transparent 0%, black 25%)",
-            WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 25%)",
-          }}
-        />
-      </motion.div>
-
-      {/* ───────── Mobile Text-Contrast Overlay ───────── */}
-      {/* Sits between photo (z-10) and text (z-20) to add a scrim for readability */}
+      {/* ───────── 4. Mobile Text-Contrast Scrim Overlay ───────── */}
       <div
         className="pointer-events-none absolute inset-0 z-[15] md:hidden"
         style={{
           background:
-            "linear-gradient(to top, var(--color-void) 0%, color-mix(in srgb, var(--color-void) 75%, transparent) 35%, color-mix(in srgb, var(--color-void) 40%, transparent) 60%, transparent 100%)",
+            "linear-gradient(to top, var(--color-void) 0%, color-mix(in srgb, var(--color-void) 82%, transparent) 40%, color-mix(in srgb, var(--color-void) 45%, transparent) 65%, transparent 100%)",
         }}
       />
 
-      {/* ───────── Text Content ───────── */}
-      <div className="relative z-20 w-full px-5 md:px-12 lg:px-20">
-        <div className="max-w-7xl">
-          {/* Label / Role */}
-          <motion.p
-            className="mb-4 font-body text-xs font-semibold uppercase tracking-ultra-wide text-red-drama"
-            style={{
-              textShadow: isMobile
-                ? "0 0 12px var(--color-void), 0 0 24px var(--color-void)"
-                : undefined,
-            }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            {heroText.role}
-          </motion.p>
+      {/* ───────── 5. Main Hero Content & Telemetry Readouts ───────── */}
+      <div className="relative z-20 w-full px-4 sm:px-8 md:px-12 lg:px-20">
+        <div className="max-w-4xl lg:max-w-5xl xl:max-w-6xl flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+          {/* Reactive Title (Role + Staggered Name + Outline Hover) */}
+          <HeroTitle
+            role={heroText.role}
+            nameLine1={heroText.nameLine1}
+            nameLine2={heroText.nameLine2}
+            onRevealComplete={() => setTitleRevealed(true)}
+          />
 
-          {/* Name — Solid Layer (layer 1) */}
-          <div className="overflow-hidden">
-            <div
-              className="hero-title-reveal font-display text-[clamp(2.8rem,12vw,5rem)] md:text-poster-xl uppercase leading-none tracking-poster text-[var(--color-bone)]"
-              style={{
-                textShadow: isMobile
-                  ? "0 2px 20px var(--color-void), 0 0 40px var(--color-void)"
-                  : undefined,
-              }}
-            >
-              {heroText.nameLine1}
+          {/* Scramble Tagline */}
+          <div className="overflow-hidden mt-0.5 sm:mt-1 md:mt-2">
+            <div className="font-mono text-[clamp(0.75rem,2.8vw,1.15rem)] sm:text-[clamp(0.9rem,2.2vw,1.35rem)] md:text-[clamp(1.2rem,1.95vw,1.95rem)] lg:text-[clamp(1.35rem,1.9vw,2.25rem)] uppercase text-[var(--color-muted)] whitespace-nowrap">
+              <ScrambleText
+                text={heroText.tagline}
+                startTrigger={titleRevealed || isIntroFinished || prefersReduced}
+              />
             </div>
           </div>
 
-          {/* Name — Outline Layer (layer 2, overlapping slightly) */}
-          <div className="overflow-hidden -mt-[0.05em]">
-            <div
-              className="hero-title-reveal font-display text-[clamp(2.8rem,12vw,5rem)] md:text-poster-xl uppercase leading-none tracking-poster"
-              style={{
-                WebkitTextStroke: isMobile ? "1px var(--color-outline-stroke)" : "1.5px var(--color-outline-stroke)",
-                WebkitTextFillColor: "transparent",
-                color: "transparent",
-                filter: isMobile
-                  ? "drop-shadow(0 0 8px var(--color-void)) drop-shadow(0 0 16px var(--color-void))"
-                  : undefined,
-              }}
-            >
-              {heroText.nameLine2}
-            </div>
+          {/* Precision Telemetry Ruler */}
+          <div className="py-0.5 hidden sm:block">
+            <TelemetryRuler />
           </div>
 
-          {/* Tagline */}
-          <div className="overflow-hidden mt-3">
-            <motion.p
-              className="font-display text-[clamp(1.5rem,5vw,2.5rem)] md:text-poster-sm uppercase tracking-ultra-wide text-[var(--color-muted)]"
-              style={{
-                textShadow: isMobile
-                  ? "0 0 12px var(--color-void), 0 0 24px var(--color-void)"
-                  : undefined,
-              }}
-              initial={{ y: "110%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {heroText.tagline}
-            </motion.p>
+          {/* F1 Skewed Parallelogram CTA Buttons */}
+          <div className="mt-1 sm:mt-2 md:mt-3">
+            <HeroCTA
+              projectsText={heroText.ctaProjects || "Lihat Projects ↓"}
+              cvText={heroText.ctaCv || "Download CV"}
+            />
           </div>
         </div>
       </div>
 
-      {/* ───────── Hairline Bottom Border ───────── */}
-      <div className="absolute bottom-0 left-0 h-px w-full bg-[var(--color-white-5)]" />
+      {/* ───────── 6. Hairline Bottom Telemetry Border ───────── */}
+      <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-[var(--color-white-10)] to-transparent" />
     </section>
   );
 }

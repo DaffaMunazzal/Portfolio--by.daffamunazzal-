@@ -22,6 +22,8 @@ export default {
     nameLine1: "DAFFA",
     nameLine2: "MUNAZZAL",
     tagline: "BAUEN. DENKEN. DEPLOYEN.",
+    ctaProjects: "Projekte Ansehen ↓",
+    ctaCv: "Lebenslauf Downloaden",
   },
 
   // ─── ABOUT SECTION ───
